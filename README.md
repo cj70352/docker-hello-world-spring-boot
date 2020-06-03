@@ -1,3 +1,4 @@
+[![Build Status](https://dev.azure.com/chandrajakhar/demoproject/_apis/build/status/cj70352.docker-hello-world-spring-boot?branchName=master)](https://dev.azure.com/chandrajakhar/demoproject/_build/latest?definitionId=1&branchName=master)
 Hello World sample shows how to deploy [SpringBoot](http://projects.spring.io/spring-boot/) RESTful web service application with [Docker](https://www.docker.com/)
 
 #### Prerequisite
