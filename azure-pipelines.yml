@@ -1,34 +1,36 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 
 pool:
   vmImage: 'ubuntu-latest'
 
-steps: 
-- task: Docker@2
-  displayName: Login to ACR
-  inputs:
-    command: login
-    containerRegistry: wfm_dev_acr_service_conn
+variables:
+  imageName: spring-demo
+
+
+steps:
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
+    options: '-Dspring.profiles.active=dev'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    codeCoverageToolOption: JaCoCo
-    sonarQubeRunAnalysis: true
-    goals: 'install -X -e -Dmaven.test.skip=true'
-- task: Docker@2
-  displayName: Build and Push
-  inputs:
-    command: buildAndPush
-    repository: wfmdevacr
-    tags: $(Build.SourceVersion)
-    #tags: latest
+    goals: 'package'
+- script: |
+    echo Build docker image
+    docker build -t $username.azurecr.io/$(imageName):$(Build.BuildNumber) .
+    echo Login to docker repository
+    docker login -u $username -p $password $username.azurecr.io
+    echo Push docker image
+    docker push $username.azurecr.io/$(imageName):$(Build.BuildNumber)
+  displayName: 'Build and Push Docker Image'
+  env:
+    username: $(acrUsername)
+    password: $(acrPassword)
