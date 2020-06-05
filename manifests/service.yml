@@ -3,7 +3,7 @@ kind: Service
 metadata:
     name: cjdockerhelloworldspringboot
 spec:
-    type: LoadBalancer
+    type: ClusterIp
     ports:
     - port: 8081 
     selector:
