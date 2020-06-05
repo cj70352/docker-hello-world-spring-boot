@@ -11,6 +11,6 @@ spec:
   - http:
       paths:
       - backend:
-          serviceName: aks-helloworld
+          serviceName: cjdockerhelloworldspringboot
           servicePort: 80
         path: /(.*)
